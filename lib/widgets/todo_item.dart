@@ -30,7 +30,7 @@ class ToDoItem extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         tileColor: Colors.white,
         leading: Icon(
-          todo.isDone ? Icons.check_box : Icons.check_box_outline_blank,
+          todo.isDone ? Icons.check_circle : Icons.check_circle_outline,
           color: tdBlue,
         ),
         title: Text(
@@ -48,7 +48,7 @@ class ToDoItem extends StatelessWidget {
           width: 35,
           decoration: BoxDecoration(
             color: tdRed,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: IconButton(
             color: Colors.white,
