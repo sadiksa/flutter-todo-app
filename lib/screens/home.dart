@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/todo.dart';
 import '../constants/colors.dart';
@@ -12,12 +15,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final todosList = ToDo.todoList();
+  final _database = Hive.box('todos');
+  List<ToDo> todosList = [];
   List<ToDo> _foundToDo = [];
   final _todoController = TextEditingController();
 
   @override
   void initState() {
+    _database.isNotEmpty ? readData() : null;
+
     _foundToDo = todosList;
     super.initState();
   }
@@ -131,12 +137,14 @@ class _HomeState extends State<Home> {
   void _handleToDoChange(ToDo todo) {
     setState(() {
       todo.isDone = !todo.isDone;
+      writeData();
     });
   }
 
   void _deleteToDoItem(String id) {
     setState(() {
       todosList.removeWhere((item) => item.id == id);
+      writeData();
     });
   }
 
@@ -146,6 +154,7 @@ class _HomeState extends State<Home> {
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         todoText: toDo,
       ));
+      writeData();
     });
     _todoController.clear();
   }
@@ -216,4 +225,22 @@ class _HomeState extends State<Home> {
       ]),
     );
   }
+
+  void writeData() {
+    _database.clear();
+    _database.put(2, todosList);
+    readData();
+  }
+
+  void readData() {
+    List<ToDo>  todos = _database.get(2, defaultValue: <ToDo>[]).cast<ToDo>();
+    print(todos);
+    if (todos == null) {
+      todosList = [];
+    } else {
+      todosList = todos;
+    }
+  }
+
+  void deleteData() {}
 }
