@@ -52,10 +52,11 @@ class _HomeState extends State<Home> {
                           bottom: 20,
                         ),
                         child: Text(
-                          'All ToDos',
+                          'ToDos',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w500,
+                            color: tdBlack
                           ),
                         ),
                       ),
@@ -95,7 +96,7 @@ class _HomeState extends State<Home> {
                         spreadRadius: 0.0,
                       ),
                     ],
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: TextField(
                     controller: _todoController,
@@ -124,6 +125,8 @@ class _HomeState extends State<Home> {
                     primary: tdBlue,
                     minimumSize: Size(60, 60),
                     elevation: 10,
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(24),
                   ),
                 ),
               ),
@@ -149,14 +152,16 @@ class _HomeState extends State<Home> {
   }
 
   void _addToDoItem(String toDo) {
-    setState(() {
-      todosList.add(ToDo(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        todoText: toDo,
-      ));
-      writeData();
-    });
-    _todoController.clear();
+    if (toDo.isNotEmpty) {
+      setState(() {
+        todosList.add(ToDo(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          todoText: toDo,
+        ));
+        writeData();
+      });
+      _todoController.clear();
+    }
   }
 
   void _runFilter(String enteredKeyword) {
@@ -209,17 +214,17 @@ class _HomeState extends State<Home> {
       backgroundColor: tdBGColor,
       elevation: 0,
       title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Icon(
-          Icons.menu,
-          color: tdBlack,
-          size: 30,
+        Text(
+          'Sadık Şahin',
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w500, color: tdBlack),
         ),
         Container(
           height: 40,
           width: 40,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.asset('assets/images/avatar.jpeg'),
+            child: Image.asset('assets/images/avatar.png'),
           ),
         ),
       ]),
@@ -233,7 +238,7 @@ class _HomeState extends State<Home> {
   }
 
   void readData() {
-    List<ToDo>  todos = _database.get(2, defaultValue: <ToDo>[]).cast<ToDo>();
+    List<ToDo> todos = _database.get(2, defaultValue: <ToDo>[]).cast<ToDo>();
     print(todos);
     if (todos == null) {
       todosList = [];
